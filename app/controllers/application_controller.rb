@@ -8,24 +8,20 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/' do
-    erb :home
+    erb :home #renders the home page with a welcome message and a Sign Up and In links
   end
 
   get '/registrations/signup' do
-
-    erb :'/registrations/signup'
+    erb :'/registrations/signup' #displays the Name, Email and password columns for Sign Up
   end
 
   post '/registrations' do
-    @user = User.new(name: params["name"], email: params["email"], password: params["password"])
-    @user.save
+    @user = User.create(name: params["name"], email: params["email"], password: params["password"])
     session[:user_id] = @user.id
-
-    redirect '/users/home'
+    redirect '/users/home' 
   end
 
   get '/sessions/login' do
-
     # the line of code below render the view page in app/views/sessions/login.erb
     erb :'sessions/login'
   end
@@ -34,7 +30,7 @@ class ApplicationController < Sinatra::Base
     @user = User.find_by(email: params[:email], password: params[:password])
     if @user
       session[:user_id] = @user.id
-      redirect '/users/home'
+      redirect '/users/home' #Displays the user Signed In page
     end
     redirect '/sessions/login'
   end
@@ -45,7 +41,6 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/users/home' do
-
     @user = User.find(session[:user_id])
     erb :'/users/home'
   end
